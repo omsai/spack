@@ -59,6 +59,7 @@ class Openbabel(CMakePackage):
             args.append('-DPYTHON_BINDINGS=OFF')
 
         args.append('-DWITH_MAEPARSER=OFF')  # maeparser is currently broken
+        args.append('-DBUILD_GUI=OFF')       # ignore installed wxwidgets
 
         return args
 
