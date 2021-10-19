@@ -9,16 +9,62 @@ from spack import *
 class Htop(AutotoolsPackage):
     """htop is an interactive text-mode process viewer for Unix systems."""
 
-    homepage = "https://github.com/hishamhm/htop"
-    url      = "https://hisham.hm/htop/releases/2.0.2/htop-2.0.2.tar.gz"
-    list_url = "https://hisham.hm/htop/releases"
-    list_depth = 1
+    homepage = "https://htop.dev"
+    url      = "https://github.com/htop-dev/htop/archive/refs/tags/3.1.1.tar.gz"
 
-    version('2.2.0', sha256='d9d6826f10ce3887950d709b53ee1d8c1849a70fa38e91d5896ad8cbc6ba3c57')
-    version('2.0.2', sha256='179be9dccb80cee0c5e1a1f58c8f72ce7b2328ede30fb71dcdf336539be2f487')
+    maintainers = ['omsai']
 
-    depends_on('ncurses')
+    version('3.1.1', sha256='b52280ad05a535ec632fbcd47e8e2c40a9376a9ddbd7caa00b38b9d6bb87ced6')
+
+    variant('sensors', default=True, description='Support reading temperature data')
+    variant('affinity', default='hwloc', description='Support CPU affinity',
+            values=('hwloc', 'capabilities', 'none'), multi=False)
+    variant('delayacct', default=True, description='Linux delay accounting support')
+    variant('virt', default='none', description='Support virtualization',
+            values=('openvz', 'vserver', 'ancient-vserver', 'none'), multi=True)
+
+    depends_on('autoconf', type='build')
+    depends_on('automake', type='build')
+    depends_on('libtool', type='build')
+
+    depends_on('ncurses@6:')
     depends_on('python+pythoncmd', type='build')
 
+    depends_on('lm-sensors', when='+sensors')
+    depends_on('hwloc', when='affinity=hwloc')
+    depends_on('libcap', when='affinity=capabilities')
+    depends_on('libnl', when='+delayacct')
+
     def configure_args(self):
-        return ['--enable-shared']
+        args = []
+
+        # Dependency related flags.
+        for flag in 'sensors delayacct'.split():
+            if '+' + flag in self.spec:
+                args.append('--enable-' + flag)
+            else:
+                args.append('--disable-' + flag)
+
+        if 'none' in self.spec.variants['affinity']:
+            args.append('--disable-hwloc')
+            args.append('--disable-capabilities')
+        elif 'hwloc' in self.spec.variants['affinity']:
+            args.append('--enable-hwloc')
+            args.append('--disable-capabilities')
+        elif 'capabilities' in self.spec.variants['affinity']:
+            args.append('--disable-hwloc')
+            args.append('--enable-capabilities')
+
+        # Dependency free flags specific to os=linux.  It don't see the value
+        # in validating the os with `self.spec.satisfies('platform=linux')` and
+        # seems better to let the user to decide what they want.
+        if 'none' not in self.spec.variants['virt']:
+            if 'openvz' in self.spec.variants['virt']:
+                args.append('--enable-openvz')
+            if 'ancient-vserver' in self.spec.variants['virt']:
+                args.append('--enable-ancient-vserver')
+                args.append('--enable-vserver')
+            if 'vserver' in self.spec.variants['virt']:
+                args.append('--enable-vserver')
+
+        return args
