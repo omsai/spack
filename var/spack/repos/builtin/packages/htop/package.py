@@ -26,6 +26,7 @@ class Htop(AutotoolsPackage):
     depends_on('autoconf', type='build')
     depends_on('automake', type='build')
     depends_on('libtool', type='build')
+    depends_on('pkgconf', type='build')
 
     depends_on('ncurses@6:')
     depends_on('python+pythoncmd', type='build')
