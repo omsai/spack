@@ -23,6 +23,7 @@ class PyXarray(PythonPackage):
         "xarray.coding",
     ]
 
+    version("2022.9.0", sha256="a2a5b48ec0a3890b71ef48853fe9d5107d2f75452722f319cb8ed6ff8e72e883")
     version("2022.3.0", sha256="398344bf7d170477aaceff70210e11ebd69af6b156fe13978054d25c48729440")
     version("0.18.2", sha256="5d2e72a228286fcf60f66e16876bd27629a1a70bf64822c565f16515c4d10284")
     version("0.17.0", sha256="9c2edad2a4e588f9117c666a4249920b9717fb75703b96998cf65fcd4f60551f")
