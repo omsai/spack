@@ -23,15 +23,12 @@ class PySunode(PythonPackage):
     depends_on("py-numba", type=("build", "run"))
     depends_on("py-numpy", type=("build", "run"))
     depends_on("py-sympy", type=("build", "run"))
+    depends_on("sundials@5 +klu +lapack")
 
-    def global_options(self, spec, prefix):
-        # FIXME: Add options to pass to setup.py
-        # FIXME: If not needed, delete this function
-        options = []
-        return options
-
-    def install_options(self, spec, prefix):
-        # FIXME: Add options to pass to setup.py install
-        # FIXME: If not needed, delete this function
-        options = []
-        return options
+    def patch(self):
+        filter_file(
+            r"include.*/usr/include/suitesparse.*",
+            f"""include.append("{self.spec['sundials'].prefix.include}")
+        library_dirs.append("{self.spec['sundials'].prefix.lib}")""",
+            "sunode/build_cvodes.py",
+        )
