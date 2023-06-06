@@ -89,10 +89,10 @@ class Arrow(CMakePackage, CudaPackage):
     variant("parquet", default=False, description="Build Parquet interface")
     variant("python", default=False, description="Build Python interface")
     variant("shared", default=True, description="Build shared libs")
-    variant("snappy", default=False, description="Build support for Snappy compression")
+    variant("snappy", default=False, when="@9:", description="Build support for Snappy compression")
     variant("tensorflow", default=False, description="Build Arrow with TensorFlow support enabled")
-    variant("zlib", default=False, description="Build support for zlib (gzip) compression")
-    variant("zstd", default=False, description="Build support for ZSTD compression")
+    variant("zlib", default=False, when="@9:", description="Build support for zlib (gzip) compression")
+    variant("zstd", default=False, when="@9:", description="Build support for ZSTD compression")
 
     root_cmakelists_dir = "cpp"
 
@@ -147,7 +147,7 @@ class Arrow(CMakePackage, CudaPackage):
         args.append(self.define_from_variant("ARROW_WITH_ZLIB", "zlib"))
         args.append(self.define_from_variant("ARROW_WITH_ZSTD", "zstd"))
 
-        with when("@:8"):
+        if self.spec.satisfies("@:8"):
             dep_list = ("flatbuffers", "rapidjson", "zlib", "zstd")
 
             if self.spec.satisfies("+snappy"):
