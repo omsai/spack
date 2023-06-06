@@ -35,7 +35,8 @@ class PyPyabc(PythonPackage):
     depends_on("py-scikit-learn@0.23.1:", type=("build", "run"))
     depends_on("py-click@7.1.2:", type=("build", "run"))
     depends_on("py-redis@2.10.6:", type=("build", "run"))
-    depends_on("py-distributed@2022.10.2:", type=("build", "run"))
+    # In spack, py-dask depends on py-distributed, not the other way round.
+    depends_on("py-dask@2022.10.2: +distributed", type=("build", "run"))
     depends_on("py-matplotlib@3.3.0:", type=("build", "run"))
     depends_on("py-sqlalchemy@2.0.12:", type=("build", "run"))
     depends_on("py-jabbar@0.0.10:", type=("build", "run"))
