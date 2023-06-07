@@ -43,3 +43,9 @@ class PyPyabc(PythonPackage):
     depends_on("py-sqlalchemy@2.0.12:", type=("build", "run"))
     depends_on("py-jabbar@0.0.10:", type=("build", "run"))
     depends_on("py-gitpython@3.1.7:", type=("build", "run"))
+
+    # For the import tests to pass using `spack install --test=root`.
+    skip_modules = [
+        "pyabc.petab",          # Optional dependency that is not installed.
+        "test",                 # Test submodules are not installed.
+    ]
