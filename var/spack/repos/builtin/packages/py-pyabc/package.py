@@ -32,7 +32,7 @@ class PyPyabc(PythonPackage):
     depends_on("py-scipy@1.5.2:", type=("build", "run"))
     depends_on("py-pandas@2.0.1:", type=("build", "run"))
     # Efficiently store pandas DataFrames using py-pyarrow.
-    depends_on("py-pyarrow +parquet", type=("build", "run"))
+    depends_on("py-pyarrow +parquet ^arrow +snappy", type=("build", "run"))
     depends_on("py-cloudpickle@1.5.0:", type=("build", "run"))
     depends_on("py-scikit-learn@0.23.1:", type=("build", "run"))
     depends_on("py-click@7.1.2:", type=("build", "run"))
