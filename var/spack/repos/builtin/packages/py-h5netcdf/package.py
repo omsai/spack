@@ -14,8 +14,10 @@ class PyH5netcdf(PythonPackage):
     homepage = "https://github.com/h5netcdf/h5netcdf"
     pypi = "h5netcdf/h5netcdf-0.10.0.tar.gz"
 
-    version("0.10.0", sha256="fc1cfec33bb9f730c412f87fcbc259167fd7620635679ccfc6e31971730dbd60")
+    version("1.1.0", sha256="932c3b573bed7370ebfc9e802cd60f1a4da5236efb11b36eeff897324d76bf56")
 
-    depends_on("python@3.6:", type=("build", "run"))
-    depends_on("py-setuptools", type="build")
+    depends_on("python@3.8:", type=("build", "run"))
+    depends_on("py-setuptools@42:", type="build")
+
     depends_on("py-h5py", type=("build", "run"))
+    depends_on("py-packaging", type=("build", "run"))
